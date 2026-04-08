@@ -7,3 +7,6 @@ extends Node
 ## return players input vector where (left = -x, right = +x, up = -y, down = +y)
 func get_input_vector() -> Vector2:
 	return Input.get_vector("left", "right", "up", "down")
+
+func swing_pressed():
+	return Input.is_action_just_pressed("swing")
