@@ -3887,11 +3887,16 @@ size = Vector2(24, 80)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y4r1p"]
 size = Vector2(47, 84)
 
-[node name="Player" type="CharacterBody2D" unique_id=859820530 node_paths=PackedStringArray("anim_tree", "StateMachine", "movable")]
+[sub_resource type="CircleShape2D" id="CircleShape2D_y4r1p"]
+radius = 528.001
+
+[node name="Player" type="CharacterBody2D" unique_id=859820530 node_paths=PackedStringArray("anim_tree", "StateMachine", "movable", "detection_area")]
+collision_mask = 14
 script = ExtResource("1_dqkch")
 anim_tree = NodePath("AnimationTree")
 StateMachine = NodePath("StateMachine")
 movable = NodePath("movable")
+detection_area = NodePath("Detection Area")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=485055932]
 scale = Vector2(4, 4)
@@ -3949,3 +3954,16 @@ script = ExtResource("8_smehm")
 parent = NodePath("../..")
 movable = NodePath("../../movable")
 metadata/_custom_type_script = "uid://ddjyseo70p7iu"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=207044291]
+zoom = Vector2(0.5, 0.5)
+
+[node name="Detection Area" type="Area2D" parent="." unique_id=285573068]
+collision_layer = 0
+collision_mask = 14
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection Area" unique_id=367350966]
+shape = SubResource("CircleShape2D_y4r1p")
+
+[connection signal="body_entered" from="Detection Area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="Detection Area" to="." method="_on_detection_area_body_exited"]
