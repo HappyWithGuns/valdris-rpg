@@ -5,6 +5,8 @@ extends CharacterBody2D
 
 @export var mana : int
 
+@export var race : Race
+
 ## Holds a reference to the AnimationTree
 @export var anim_tree : AnimationTree
 
@@ -13,14 +15,19 @@ extends CharacterBody2D
 
 @export var movable : Movable
 
+@onready var timer := %LifeSpanTimer
+
 var playback : AnimationNodeStateMachinePlayback
 
 func _ready() -> void:
+	timer.wait_time = race.lifespan * 60 * 60
+	timer.start()
+	health = race.base_health
+	mana = race.base_mana
 	playback = anim_tree["parameters/playback"]
 
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 
-func apply_force(force : float, acceleratio_time : float, length_of_tween : float) -> void:
-	var impluse := Vector2(force * acceleratio_time, force * acceleratio_time) * movable.get_input_vector()
-	create_tween().set_ease(Tween.EASE_IN).tween_property(self, "velocity", impluse, length_of_tween)
+func _on_life_span_timer_timeout() -> void:
+	queue_free()

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dv35f4o3acje8" path="res://sprites/Test Knight/Spritesheets/Shadowless/Idle_Shadowless.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dvb4kaaxx2q1u" path="res://scripts/player.gd" id="1_dqkch"]
+[ext_resource type="Resource" uid="uid://csrolokferqmq" path="res://resources/races/Human.tres" id="2_d2wvv"]
 [ext_resource type="Texture2D" uid="uid://bksywv7oxheef" path="res://sprites/Test Knight/Spritesheets/Shadowless/Walk_Shadowless.png" id="2_g2els"]
 [ext_resource type="Texture2D" uid="uid://betxyttrn08b6" path="res://sprites/Test Knight/Spritesheets/Shadowless/Melee2_Shadowless.png" id="3_y4r1p"]
 [ext_resource type="Script" uid="uid://be735acmfamug" path="res://scripts/new_nodes/movement.gd" id="4_qlg0r"]
@@ -2710,10 +2711,10 @@ animation = &"swing_left"
 animation = &"swing_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4bnot"]
-animation = &"walk_bottom_right"
+animation = &"swing_bottom_right"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dlvb6"]
-animation = &"walk_bottom_left"
+animation = &"swing_bottom_left"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a17cv"]
 animation = &"swing_top_left"
@@ -3889,6 +3890,7 @@ size = Vector2(47, 84)
 
 [node name="Player" type="CharacterBody2D" unique_id=859820530 node_paths=PackedStringArray("anim_tree", "StateMachine", "movable")]
 script = ExtResource("1_dqkch")
+race = ExtResource("2_d2wvv")
 anim_tree = NodePath("AnimationTree")
 StateMachine = NodePath("StateMachine")
 movable = NodePath("movable")
@@ -3927,6 +3929,11 @@ shape = SubResource("RectangleShape2D_y4r1p")
 disabled = true
 debug_color = Color(1, 0, 0.09019608, 0.41960785)
 
+[node name="LifeSpanTimer" type="Timer" parent="." unique_id=1966745378]
+unique_name_in_owner = true
+one_shot = true
+ignore_time_scale = true
+
 [node name="StateMachine" type="Node" parent="." unique_id=1289188098 node_paths=PackedStringArray("initial_node_state")]
 script = ExtResource("5_tuyoq")
 initial_node_state = NodePath("idle")
@@ -3949,3 +3956,5 @@ script = ExtResource("8_smehm")
 parent = NodePath("../..")
 movable = NodePath("../../movable")
 metadata/_custom_type_script = "uid://ddjyseo70p7iu"
+
+[connection signal="timeout" from="LifeSpanTimer" to="." method="_on_life_span_timer_timeout"]

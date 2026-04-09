@@ -18,7 +18,6 @@ func _on_next_transitions() -> void:
 
 func _on_enter() -> void:
 	parent.velocity = Vector2.ZERO
-	parent.apply_force(300, 0.5, 0.5)
 	select_anim("swing")
 
 func _on_exit() -> void:
