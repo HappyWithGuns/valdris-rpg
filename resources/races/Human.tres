@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Race" format=3 uid="uid://csrolokferqmq"]
+
+[ext_resource type="Script" uid="uid://dog8kepi0ydp3" path="res://scripts/race_base.gd" id="1_5tx6x"]
+
+[resource]
+script = ExtResource("1_5tx6x")
+lifespan = 10
+base_health = 100
+base_mana = 100
+metadata/_custom_type_script = "uid://dog8kepi0ydp3"

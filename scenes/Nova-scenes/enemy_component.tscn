@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://bytjpyf6e3wtt"]
-
-[ext_resource type="Script" uid="uid://bd7t8vt6gg0a0" path="res://scripts/Nova-scripts/enemy_component.gd" id="1_1os7f"]
-
-[node name="EnemyComponent" type="Node2D" unique_id=788283942]
-script = ExtResource("1_1os7f")
