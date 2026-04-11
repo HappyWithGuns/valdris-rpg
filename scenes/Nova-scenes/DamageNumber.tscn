@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://x2vmewyyf1ur"]
-
-[ext_resource type="Script" uid="uid://bwyran43s8vtj" path="res://scripts/Nova-scripts/damage_number.gd" id="1_7tb68"]
-
-[node name="DamageNumber" type="Label" unique_id=961286777]
-offset_right = 40.0
-offset_bottom = 23.0
-script = ExtResource("1_7tb68")
