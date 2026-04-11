@@ -3,9 +3,12 @@ extends PlayerState
 func _on_process(_delta : float) -> void:
 	await parent.anim_tree.animation_finished
 	
-	update_anim_parameters(input_vector)
+	if !parent.locked_on:
+		update_anim_parameters(input_vector)
 	
 	if movable.get_input_vector() != Vector2.ZERO:
+		if Input.is_action_pressed("sprint") and !parent.burnt_out:
+			transition.emit(&"sprint")
 		transition.emit(&"walk")
 	else:
 		transition.emit(&"idle")

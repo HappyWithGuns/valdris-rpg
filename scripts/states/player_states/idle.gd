@@ -2,8 +2,10 @@ extends PlayerState
 
 func _on_process(_delta : float) -> void:
 	if movable.get_input_vector() != Vector2.ZERO:
+		if Input.is_action_pressed("sprint") and !parent.burnt_out:
+			transition.emit(&"sprint")
 		transition.emit(&"walk")
-	if movable.swing_pressed():
+	if Input.is_action_just_pressed("swing"):
 		transition.emit(&"swing")
 
 func _on_physics_process(_delta : float) -> void:

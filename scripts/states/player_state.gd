@@ -20,6 +20,7 @@ func update_anim_parameters(input_vector : Vector2) -> void:
 	parent.anim_tree["parameters/idle/blend_position"] = parameter_vector
 	parent.anim_tree["parameters/walk/blend_position"] = parameter_vector
 	parent.anim_tree["parameters/swing/blend_position"] = parameter_vector
+	parent.anim_tree["parameters/sprint/blend_position"] = parameter_vector
 
 ## Allows the selection of a specific animation group of the same input from the AnimationTree
 func select_anim(anim_name : String) -> void:
