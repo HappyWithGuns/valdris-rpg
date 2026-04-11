@@ -6,12 +6,10 @@ extends CharacterBody2D
 @export var mana : int
 
 @export_group("References")
-## Holds a reference to the AnimationTree
 @export var anim_tree : AnimationTree
-## Holds a reference to the StateMachine node
 @export var StateMachine : NodeStateController
 @export var movable : Movable
-## The Area2D used for enemy detection
+## The Area2D used for enemy / collectibles detection
 @export var detection_area : Area2D
 
 var playback : AnimationNodeStateMachinePlayback
@@ -26,17 +24,23 @@ func _ready() -> void:
 		push_warning("Detection Area is missing on " + name + "! Make sure to assign it in the Inspector.")
 
 func _physics_process(_delta: float) -> void:
+	move_and_slide()
+	
+	if Input.is_action_just_pressed("interact"): 
+		var areas = detection_area.get_overlapping_areas()
+		for area in areas:
+			if area.is_in_group("Collectible"):
+				area.collect(self)
+				break
+	
 	if target_enemy:
 		look_at_target()
-		
-		# Check for attack input while a target is locked
-		if Input.is_action_just_pressed("swing"): # Ensure "attack" is set in Input Map
+		if Input.is_action_just_pressed("swing"):
 			attack_enemy()
 	else:
-		# Ensure tree is active if no target
-		anim_tree.active = true
-		
-	move_and_slide()
+		var input_vec = movable.get_input_vector() if movable else Vector2.ZERO
+		if input_vec != Vector2.ZERO:
+			update_sprite_direction(input_vec)
 
 func apply_force(force : float, acceleratio_time : float, length_of_tween : float) -> void:
 	var input_vec : Vector2 = movable.get_input_vector() if movable else Vector2.ZERO
@@ -64,20 +68,19 @@ func attack_enemy():
 				push_error("Error: Found node 'EnemyComponent' but it's missing the take_damage script!")
 
 func look_at_target():
-	# Keep the tree off while manual-steering animations
-	anim_tree.active = false 
+	# CRITICAL: Do NOT set anim_tree.active = false. 
+	# The tree must stay active to process the BlendSpaces.
+	anim_tree.active = true 
 	
 	var dir = (target_enemy.global_position - global_position).normalized()
 	update_sprite_direction(dir)
 
 func update_sprite_direction(direction: Vector2):
-	# Adjust these paths to match your actual AnimationTree BlendSpace names
 	anim_tree.set("parameters/Idle/blend_position", direction)
 	anim_tree.set("parameters/Walk/blend_position", direction)
 
 func _on_detection_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Enemy"):
-		# Lock onto the first enemy that walks in
 		if target_enemy == null:
 			target_enemy = body
 			print("Enemy detected: ", body.name)
@@ -89,14 +92,17 @@ func find_target():
 	for body in bodies:
 		if body.is_in_group("Enemy"):
 			target_enemy = body
-			break # Just grab the first available one
+			break
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
 	if body == target_enemy:
-		# If our current target leaves, stop looking at them
 		target_enemy = null
-		anim_tree.active = true # Restore normal movement animations
+		anim_tree.active = true
 		print("Target lost.")
-		
-		# Optional: Try to find another enemy still in the area
 		find_target()
+
+@onready var inventory = $Inventory
+
+func collect_item(item: ItemData):
+	if inventory.add_item(item):
+		pass
